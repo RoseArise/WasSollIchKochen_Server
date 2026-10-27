@@ -26,7 +26,10 @@ import io.ktor.websocket.CloseReason
 import io.ktor.websocket.close
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.selectAll
+import org.slf4j.LoggerFactory
 import kotlin.time.Duration.Companion.seconds
+
+private val syncLog = LoggerFactory.getLogger("sync")
 
 fun Application.module() {
     val dbUrl = System.getenv("DATABASE_URL") ?: environment.config.tryGetString("database.url") ?: "jdbc:postgresql://localhost:5432/wassollichkochen"
@@ -67,10 +70,12 @@ fun Application.module() {
             }
 
             SyncHub.register(householdId, this)
+            syncLog.debug("Client verbunden: {} (jetzt {})", householdId, SyncHub.clientCount(householdId))
             try {
                 for (frame in incoming) { /* nur Empfang */ }
             } finally {
                 SyncHub.unregister(householdId, this)
+                syncLog.debug("Client getrennt: {} (jetzt {})", householdId, SyncHub.clientCount(householdId))
             }
         }
     }

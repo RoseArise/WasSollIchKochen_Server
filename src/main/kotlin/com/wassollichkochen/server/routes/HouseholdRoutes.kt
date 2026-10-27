@@ -1,9 +1,12 @@
 package com.wassollichkochen.server.routes
 
+import com.wassollichkochen.server.auth.requireHouseholdAuth
 import com.wassollichkochen.server.db.DatabaseFactory
 import com.wassollichkochen.server.db.Households
+import com.wassollichkochen.server.models.ClientCountResponse
 import com.wassollichkochen.server.models.CreateHouseholdResponse
 import com.wassollichkochen.server.models.HouseholdExistsResponse
+import com.wassollichkochen.server.sync.SyncHub
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
@@ -66,6 +69,13 @@ fun Route.householdRoutes() {
                 Households.selectAll().where { Households.id eq code }.singleOrNull()?.get(Households.apiToken)
             } ?: return@get call.respond(HttpStatusCode.NotFound)
             call.respond(CreateHouseholdResponse(householdId = code, apiToken = token))
+        }
+
+        get("/{code}/clients") {
+            val code = call.parameters["code"]?.uppercase()
+                ?: return@get call.respond(HttpStatusCode.BadRequest)
+            if (!call.requireHouseholdAuth(code)) return@get
+            call.respond(ClientCountResponse(code, SyncHub.clientCount(code)))
         }
     }
 }

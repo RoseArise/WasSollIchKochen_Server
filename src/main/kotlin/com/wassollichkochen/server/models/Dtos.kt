@@ -28,3 +28,9 @@ data class CreateHouseholdResponse(
 data class HouseholdExistsResponse(
     val exists: Boolean
 )
+
+@Serializable
+data class ClientCountResponse(
+    val householdId: String,
+    val clients: Int
+)

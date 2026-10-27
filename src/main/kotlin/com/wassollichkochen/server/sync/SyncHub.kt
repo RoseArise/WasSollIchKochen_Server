@@ -46,4 +46,7 @@ object SyncHub {
         }
     }
 
+    suspend fun clientCount(householdId: String): Int =
+        mutex.withLock { connections[householdId]?.size ?: 0 }
+
 }
