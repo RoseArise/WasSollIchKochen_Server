@@ -1,0 +1,17 @@
+ktor:
+  application:
+    modules:
+      - com.wassollichkochen.server.ApplicationKt.module
+  deployment:
+    port: 8080
+    host: 0.0.0.0
+    sslPort: 8443
+    ssl:
+      keyStore: /etc/ssl/keystore.p12
+      keyStorePassword: ${SSL_PASSWORD:changeme}
+      keyAlias: wassollichkochen
+
+database:
+  url: "${DATABASE_URL:jdbc:postgresql://localhost:5432/wassollichkochen}"
+  user: "${DATABASE_USER:wsik}"
+  password: "${DATABASE_PASSWORD:changeme}"

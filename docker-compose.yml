@@ -1,0 +1,29 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: wassollichkochen
+      POSTGRES_USER: wsik
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  server:
+    build: .
+    depends_on: [db]
+    hostname: wassollichkochen.local
+    environment:
+      DATABASE_URL: jdbc:postgresql://db:5432/wassollichkochen
+      DATABASE_USER: wsik
+      DATABASE_PASSWORD: ${DB_PASSWORD}
+      SSL_PASSWORD: ${SSL_PASSWORD}
+    volumes:
+      - ./certs/keystore.p12:/etc/ssl/keystore.p12:ro
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    restart: unless-stopped
+
+volumes:
+  pgdata:
