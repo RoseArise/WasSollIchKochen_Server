@@ -2,6 +2,7 @@ package com.wassollichkochen.server.db
 
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.timestamp
+import java.time.Instant
 
 object Households : Table("households") {
     val id = varchar("id", 6)
@@ -19,6 +20,6 @@ object ShoppingItems : Table("shopping_items") {
     val isCompleted = bool("is_completed")
     val category = varchar("category", 100)
     override val primaryKey = PrimaryKey(id)
-    val createdAt = timestamp("created_at")
-    val updatedAt = timestamp("updated_at")
+    val createdAt = timestamp("created_at").clientDefault { Instant.now() }
+    val updatedAt = timestamp("updated_at").clientDefault { Instant.now() }
 }

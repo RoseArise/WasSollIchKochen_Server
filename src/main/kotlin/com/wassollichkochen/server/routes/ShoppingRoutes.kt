@@ -20,6 +20,7 @@ import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
+import java.time.Instant
 
 private fun ResultRowToDto(row: org.jetbrains.exposed.sql.ResultRow) = ShoppingItemDto(
     id = row[ShoppingItems.id],
@@ -62,6 +63,7 @@ fun Route.shoppingRoutes() {
                         it[unit] = dto.unit
                         it[isCompleted] = dto.isCompleted
                         it[category] = dto.category
+                        it[updatedAt] = Instant.now()
                     }
                 } else {
                     ShoppingItems.insert {
