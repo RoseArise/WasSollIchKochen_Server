@@ -28,11 +28,6 @@ import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.selectAll
 import kotlin.time.Duration.Companion.seconds
 
-fun main() {
-    embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module)
-        .start(wait = true)
-}
-
 fun Application.module() {
     val dbUrl = System.getenv("DATABASE_URL") ?: environment.config.tryGetString("database.url") ?: "jdbc:postgresql://localhost:5432/wassollichkochen"
     val dbUser = System.getenv("DATABASE_USER") ?: environment.config.tryGetString("database.user") ?: "wsik"

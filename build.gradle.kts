@@ -9,7 +9,7 @@ group = "com.wassollichkochen"
 version = "1.0.0-SNAPSHOT"
 
 application {
-    mainClass.set("com.wassollichkochen.server.ApplicationKt")
+    mainClass.set("io.ktor.server.netty.EngineMain")
 }
 
 kotlin {
