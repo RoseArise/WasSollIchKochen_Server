@@ -6,10 +6,12 @@ ktor:
     port: 8080
     host: 0.0.0.0
     sslPort: 8443
+  security:
     ssl:
       keyStore: /etc/ssl/keystore.p12
-      keyStorePassword: ${SSL_PASSWORD:changeme}
       keyAlias: wassollichkochen
+      keyStorePassword: ${SSL_PASSWORD}
+      privateKeyPassword: ${SSL_PASSWORD}
 
 database:
   url: "${DATABASE_URL:jdbc:postgresql://localhost:5432/wassollichkochen}"
